@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Client} from 'redis-om';
+import {Client} from 'redis-om';
+import {createClient} from 'redis'
 import { ConfigService } from '@config/config.service';
 
 
@@ -9,7 +10,11 @@ export class RedisService {
     constructor(private config: ConfigService) {}
 
     async onModuleInit() {
-        this.client = await new Client().open(this.config.REDIS_URI);
+        const redis = createClient({url:this.config.REDIS_URI,pingInterval: 1000,legacyMode:true})
+        this.client = await new Client().use(redis)
+        //.open(this.config.REDIS_URI);
+        // redis.on('error', (err) => console.log('Redis Client Error', err));
+        // await redis.connect()
     }
 
     isOpen(): boolean {
