@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model wallets {
+  id               String            @id @default(uuid())
+  balance          Int
+  change_amount    Int
+  mode             String            @db.VarChar(100)
+  currency         String            @db.VarChar(100)
+  transaction_id   String?           @db.VarChar(256)
+  created_at       DateTime          @default(now())
+  updated_at       DateTime          @updatedAt
+  accounts         accounts?
+  reserve_accounts reserve_accounts?
+}
+
+model wallets_history {
+  id             String   @id @default(uuid())
+  balance        Int
+  change_amount  Int
+  mode           String   @db.VarChar(100)
+  currency       String   @db.VarChar(100)
+  wallet_id      String   @db.VarChar(256)
+  transaction_id String?  @db.VarChar(256)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+}
+
+model accounts {
+  id             String   @id @default(uuid())
+  account_name   String   @db.VarChar(256)
+  bank_name      String?  @default("Fincra Bank") @db.VarChar(256)
+  account_number String   @unique
+  phone_number   String
+  currency       String   @db.VarChar(100)
+  wallet_id      String   @unique
+  wallet         wallets  @relation(fields: [wallet_id], references: [id])
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+}
+
+model reserve_accounts {
+  id         String   @id @default(uuid())
+  slug       String   @db.VarChar(100)
+  currency   String   @db.VarChar(100)
+  wallet_id  String   @unique
+  wallet     wallets  @relation(fields: [wallet_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model transactions {
+  id                         String   @id @default(uuid())
+  type                       String   @db.VarChar(100)
+  amount                     Int
+  fee                        Int
+  reference                  String   @db.VarChar(256)
+  status                     String   @default("pending") @db.VarChar(256)
+  account_id                 String   @db.VarChar(256)
+  sender_account_name        String   @db.VarChar(256)
+  sender_account_number      String   @db.VarChar(256)
+  sender_bank_name           String   @db.VarChar(256)
+  beneficiary_account_name   String   @db.VarChar(256)
+  beneficiary_account_number String   @db.VarChar(256)
+  beneficiary_bank_name      String   @db.VarChar(256)
+  mode                       String   @db.VarChar(100)
+  currency                   String   @db.VarChar(100)
+  created_at                 DateTime @default(now())
+  updated_at                 DateTime @updatedAt
+}
