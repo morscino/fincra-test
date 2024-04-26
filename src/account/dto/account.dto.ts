@@ -1,7 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 import { IsEnum, IsNotEmpty, IsPhoneNumber, IsString, IsUUID, Length, Validate } from "class-validator";
-
 import { MoneyAmount } from "@common/decorators";
 import { Currency } from "@common/enums";
 import { Utils } from "@common/utils";

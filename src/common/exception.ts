@@ -10,12 +10,4 @@ export class AppException extends HttpException {
     ) {
         super( code, status);
     }
-
-    // public static get REQUEST_TIMEOUT() {
-    //     return new this(
-    //         null,
-    //         'Request Timed out',
-    //         AppStatus.RequestTimeout,
-    //     );
-    // }
 }

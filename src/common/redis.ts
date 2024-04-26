@@ -12,9 +12,6 @@ export class RedisService {
     async onModuleInit() {
         const redis = createClient({url:this.config.REDIS_URI,pingInterval: 1000,legacyMode:true})
         this.client = await new Client().use(redis)
-        //.open(this.config.REDIS_URI);
-        // redis.on('error', (err) => console.log('Redis Client Error', err));
-        // await redis.connect()
     }
 
     isOpen(): boolean {

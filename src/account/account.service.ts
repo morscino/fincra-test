@@ -70,7 +70,6 @@ export class AccountService {
       throw new AppException("account not found", HttpStatus.BAD_REQUEST);
     }
 
-    // TODO !!! lock account wallet
     // create account funding txn
     const transactionData: Transaction = {
       type: TransactionType.AccountFunding,
@@ -111,7 +110,6 @@ export class AccountService {
         { status: TransactionStatus.Failed }
       );
     }
-    // TODO !!! unlock account wallet
     // return processed transaction
     return transaction;
   }
