@@ -4,6 +4,27 @@
       ports:
         - '5432:5432'
       environment:
-        - POSTGRES_USER=admin
+        - POSTGRES_USER=root
         - POSTGRES_PASSWORD=password
-        - POSTGRES_DB=test_db  
+        - POSTGRES_DB=fincra_db  
+
+    app:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: fincra-app
+      environment:
+          - PORT=${PORT}
+      ports:
+        - '3000:3000'
+      depends_on:
+        - db
+        - redis
+      volumes:
+          - ./src:/app/src    
+
+    redis:
+      image: redis:7-alpine
+      container_name: fincra-cache
+      ports:
+        - '${REDIS_PORT:-6379}:6379'      

@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../src/prisma/prisma.service";
 import { Wallet, WalletHistory } from "./entities/wallet.entity";
-import { TransactionStatus } from "src/transaction/transaction.enum";
 import { RedisService } from "@common/redis";
 import { Currency, RedisKeys, WALLET_LOCK_TTL } from "@common/enums";
 import { Utils } from "@common/utils";
@@ -45,9 +44,6 @@ export class WalletService {
         },
       }),
       this.prisma.wallets_history.create({ data: { ...debitWalletHistory } }),
-
-      // mark txn as successful
-      //this.prisma.transactions.update({where:{id:debitWallet.transaction_id},data:{status:TransactionStatus.Success}}),
 
       // update credit wallet and create history
       this.prisma.wallets.update({
